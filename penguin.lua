@@ -1,10 +1,10 @@
-Penguin = {
-    image = love.graphics.newImage('penguin.png'),
-    x = 0,
-    y = 0,
-}
+local Node = require('node')
+local Sprite = require('sprite')
 
-print(Penguin)
+local Penguin = Node:new()
+
+Penguin.sprite = Sprite:new()
+Penguin.sprite:set_image('penguin.png')
 
 function Penguin:new(o)
     o = o or {}
@@ -14,12 +14,18 @@ function Penguin:new(o)
 end
 
 function Penguin:set_position(x, y)
-    self.x = x
-    self.y = y
+    self.position.x = x
+    self.position.y = y
+end
+
+function Penguin:move(x, y)
+    self.position.x = self.position.x + x
+    self.position.y = self.position.y + y
 end
 
 function Penguin:draw()
-    love.graphics.draw(self.image, self.x, self.y)
+    Node.draw(self)
+    Penguin.sprite:draw()
 end
 
 return Penguin
