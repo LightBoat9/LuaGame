@@ -30,7 +30,7 @@ function love.update(delta)
     -- Call update on all objects
     for _, v in pairs(objects) do
         v:update(delta)
-    end 
+    end
 end
 
 -- Draw stuff

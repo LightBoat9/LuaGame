@@ -29,7 +29,7 @@ function Node:set_rotation(rot)
 end
 
 function Node:set_position(x, y)
-    self.position = { x = x, y = y }
+    self.position = { x = x, y = y}
 end
 
 return Node
