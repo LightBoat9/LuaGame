@@ -1,5 +1,9 @@
+--- extention of node that has a texture
+
 local Node = require('node')
 local Sprite = Node:new()
+
+Sprite.centered = false
 
 function Sprite:new(o)
     o = o or {}
@@ -10,17 +14,28 @@ end
 
 function Sprite:draw()
     Node.draw(self)
-    love.graphics.push()
-    love.graphics.scale(self.scale.x, self.scale.y)
     if self.image then
-        love.graphics.draw(self.image, self.position.x, self.position.y)
+        width, height = self:get_size()
+        love.graphics.draw(self.image, self.position.x, self.position.y, self.rotation, self.scale.x, self.scale.y, self.centered and width/2 or 0, self.centered and height/2 or 0)
     end
-    love.graphics.pop()
 end
 
-function Sprite:set_image(image_path)
+-- Set the image for this sprite, optional filter defaults to nearest
+function Sprite:set_image(image_path, filter)
     self.image = love.graphics.newImage(image_path)
-    self.image:setFilter('nearest')
+    self.image:setFilter(filter and filter or 'nearest')
+end
+
+--- return the size (width, height) of this sprites image in pixels
+function Sprite:get_size()
+    if self.image then
+        return self.image:getWidth(), self.image:getHeight()
+    end
+    return 0, 0
+end
+
+function Sprite:set_centered(centered)
+    self.centered = centered
 end
 
 return Sprite
