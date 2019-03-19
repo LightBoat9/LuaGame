@@ -1,22 +1,20 @@
 --- extention of node that has a texture
 
-local Node = require('node')
-local Sprite = Node:new()
+local Sprite = {}
 
 Sprite.centered = false
 
-function Sprite:new(o)
-    o = o or {}
+function Sprite:new()
+    o = {}
     setmetatable(o, self)
     self.__index = self
     return o
 end
 
 function Sprite:draw()
-    Node.draw(self)
     if self.image then
         width, height = self:get_size()
-        love.graphics.draw(self.image, self.position.x, self.position.y, self.rotation, self.scale.x, self.scale.y, self.centered and width/2 or 0, self.centered and height/2 or 0)
+        love.graphics.draw(self.image, 0, 0, self.rotation, 1, 1, self.centered and width/2 or 0, self.centered and height/2 or 0)
     end
 end
 

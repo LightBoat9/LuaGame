@@ -1,5 +1,6 @@
 local Penguin = require('penguin')
 local Sprite = require('sprite')
+local Seal = require('seal')
 
 local objects = {}
 
@@ -9,17 +10,39 @@ function love.load()
     love.graphics.setBackgroundColor(34.0/255, 49.0/255, 63.0/255)
     love.graphics.setNewFont(32)
 
+    world = love.physics.newWorld(0, 0, true)
+
     local background = Sprite:new()
     background:set_image('background.png')
     table.insert(objects, background)
-    background:set_position(0, 0)
 
-    local my_object = Penguin:new()
+    local peng = Penguin:new(world)
     local width, height = love.graphics.getDimensions()
-    my_object:set_position(128, height / 2)
-    table.insert(objects, my_object)
+    peng.body:setX(128)
+    peng.body:setY(height / 2)
+    table.insert(objects, peng)
+
+    local seal = Seal:new(world)
+    seal.body:setX(width)
+    seal.body:setY(height / 2)
+    table.insert(objects, seal)
+
+    world:setCallbacks(beginContact, endContact, preSolve, postSolve)
 end
 
+function beginContact(a, b, col)
+    print(a, b, col)
+end
+
+function endContact(a, b, col)
+    print(a, b, col)
+end
+function preSolve(a, b, col)
+    print(a, b, col)
+end
+function postSolve(a, b, col)
+    print(a, b, col, ormalimpulse, tangentimpulse)
+end
 
 -- Called every time the system can
 function love.update(delta)
@@ -27,9 +50,12 @@ function love.update(delta)
         love.window.close()    
     end
     
+    -- Update world
+    --world:update(delta)
+
     -- Call update on all objects
     for _, v in pairs(objects) do
-        v:update(delta)
+        if v.update then v:update(delta) end
     end
 end
 
