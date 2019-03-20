@@ -19,19 +19,19 @@ function love.load()
     local peng = Penguin:new(world)
     local width, height = love.graphics.getDimensions()
     peng.body:setX(128)
-    peng.body:setY(height / 2)
+    peng.body:setY(100000000)
     table.insert(objects, peng)
 
     local seal = Seal:new(world)
     seal.body:setX(width)
-    seal.body:setY(height / 2)
+    seal.body:setY(200)
     table.insert(objects, seal)
 
     world:setCallbacks(beginContact, endContact, preSolve, postSolve)
 end
 
 function beginContact(a, b, col)
-    print(a, b, col)
+    love.event.quit()
 end
 
 function endContact(a, b, col)
@@ -51,7 +51,7 @@ function love.update(delta)
     end
     
     -- Update world
-    --world:update(delta)
+    world:update(delta)
 
     -- Call update on all objects
     for _, v in pairs(objects) do
