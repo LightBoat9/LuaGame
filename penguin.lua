@@ -10,14 +10,17 @@ function Penguin:new(world, x, y)
     o = {}
     setmetatable(o, self)
     self.__index = self
-    self.shape = love.physics.newCircleShape(20)
-    self.body = love.physics.newBody(world, x, y, 'dynamic')
-    self.fixture = love.physics.newFixture(self.body, self.shape)
-    self.fixture:setUserData('penguin')
-    self.fixture:setSensor(true)
+    
+    o.shape = love.physics.newCircleShape(20)
+    o.body = love.physics.newBody(world, x, y, 'dynamic')
+    o.fixture = love.physics.newFixture(o.body, o.shape)
+    o.fixture:setUserData(o)
+    o.name = 'penguin'
+
+    o.fixture:setSensor(true)
 
     -- Exists on category 1
-    self.fixture:setCategory(1)
+    o.fixture:setCategory(1)
     return o
 end
 

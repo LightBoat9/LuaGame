@@ -1,8 +1,4 @@
---- extention of node that has a texture
-
-local Sprite = {
-    rotation = 0,
-}
+local Sprite = {}
 
 Sprite.centered = false
 
@@ -10,6 +6,9 @@ function Sprite:new()
     o = {}
     setmetatable(o, self)
     self.__index = self
+    
+    o.rotation = 0
+    
     return o
 end
 

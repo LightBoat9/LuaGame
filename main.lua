@@ -17,30 +17,27 @@ function love.load()
     background:set_image('background.png')
     table.insert(objects, background)
 
-    local peng = Penguin:new(world)
     local width, height = love.graphics.getDimensions()
-    peng.body:setX(128)
-    peng.body:setY(height / 2)
-    table.insert(objects, peng)
 
     local seal = Seal:new(world)
-    print(seal.body)
     seal.body:setX(width)
-    seal.body:setY(108 + 128/2)
+    seal.body:setY(150 + 96/2)
     table.insert(objects, seal)
 
     local fish = Fish:new(world)
     fish.body:setX(width)
-    fish.body:setY(seal.body:getY() + 128)
+    fish.body:setY(seal.body:getY() + 96)
     table.insert(objects, fish)
 
     local seal2 = Seal:new(world)
     seal2.body:setX(width)
-    seal2.body:setY(fish.body:getX() + 128)
-    --table.insert(objects, seal2)
+    seal2.body:setY(fish.body:getY() + 96)
+    table.insert(objects, seal2)
 
-    print(seal.body)
-    print(seal2.body)
+    local peng = Penguin:new(world)
+    peng.body:setX(128)
+    peng.body:setY(height / 2)
+    table.insert(objects, peng)
 
     world:setCallbacks(beginContact)
 end
@@ -48,12 +45,17 @@ end
 --- Called when two fixtures collide
 function beginContact(fixture1, fixture2)
     -- Create a table with the fixture userdata as its key and the fixture as the value
-    fixtures = { [fixture1:getUserData()]=fixture1, [fixture2:getUserData()]=fixture2 }
+    fixtures = { [fixture1:getUserData().name]=fixture1:getUserData(), [fixture2:getUserData().name]=fixture2:getUserData() }
     
-    if fixtures.penguin and fixtures.seal then    
-        print('Penguin Hurt')
+    if fixtures.penguin then
+        if fixtures.seal then    
+            print('Penguin Hurt')
+        elseif fixtures.fish then
+            destroy(fixtures.fish)
+            print('Yummy Fish')
+        end
     end
-
+    
     return true -- No actual collisions
 end
 
@@ -77,5 +79,13 @@ function love.draw()
     -- Call draw on all objects
     for _, v in pairs(objects) do
         v:draw()
+    end
+end
+
+function destroy(object)
+    for key, value in pairs(objects) do
+        if value == object then
+            objects.key = nil --todo fix
+        end
     end
 end
