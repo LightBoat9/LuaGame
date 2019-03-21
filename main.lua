@@ -85,7 +85,7 @@ end
 function destroy(object)
     for key, value in pairs(objects) do
         if value == object then
-            objects.key = nil --todo fix
+            table.remove(objects, key)
         end
     end
 end
