@@ -13,7 +13,11 @@ function Penguin:new(world, x, y)
     self.shape = love.physics.newCircleShape(20)
     self.body = love.physics.newBody(world, x, y, 'dynamic')
     self.fixture = love.physics.newFixture(self.body, self.shape)
-    self.fixture:setUserData('Penguin')
+    self.fixture:setUserData('penguin')
+    self.fixture:setSensor(true)
+
+    -- Exists on category 1
+    self.fixture:setCategory(1)
     return o
 end
 
