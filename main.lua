@@ -1,7 +1,6 @@
 local Penguin = require('penguin')
 local Sprite = require('sprite')
-local Seal = require('seal')
-local Fish = require('fish')
+local Waves = require('waves')
 
 local objects = {}
 
@@ -18,28 +17,35 @@ function love.load()
     table.insert(objects, background)
 
     local width, height = love.graphics.getDimensions()
-
-    local seal = Seal:new(world)
-    seal.body:setX(width)
-    seal.body:setY(150 + 96/2)
-    table.insert(objects, seal)
-
-    local fish = Fish:new(world)
-    fish.body:setX(width)
-    fish.body:setY(seal.body:getY() + 96)
-    table.insert(objects, fish)
-
-    local seal2 = Seal:new(world)
-    seal2.body:setX(width)
-    seal2.body:setY(fish.body:getY() + 96)
-    table.insert(objects, seal2)
-
+    
     local peng = Penguin:new(world)
     peng.body:setX(128)
     peng.body:setY(height / 2)
-    table.insert(objects, peng)
-
+    add_object(peng)
+    
     world:setCallbacks(beginContact)
+
+    waves = Waves:new(world)
+    waves:set_callback(next_wave)
+    add_object(waves)
+end
+
+function next_wave()
+    waves:spawn(objects, remove_object)
+end
+
+function add_object(o)
+    table.insert(objects, o)
+end
+
+function remove_object(o)
+    -- Loop through objects and find the object
+    -- if found remove it from the table
+    for key, value in pairs(objects) do
+        if value == o then
+            table.remove(objects, key)
+        end
+    end
 end
 
 --- Called when two fixtures collide
@@ -51,7 +57,7 @@ function beginContact(fixture1, fixture2)
         if fixtures.seal then    
             print('Penguin Hurt')
         elseif fixtures.fish then
-            destroy(fixtures.fish)
+            remove_object(fixtures.fish)
             print('Yummy Fish')
         end
     end
@@ -78,14 +84,6 @@ end
 function love.draw()
     -- Call draw on all objects
     for _, v in pairs(objects) do
-        v:draw()
-    end
-end
-
-function destroy(object)
-    for key, value in pairs(objects) do
-        if value == object then
-            table.remove(objects, key)
-        end
+        if v.draw then v:draw() end
     end
 end

@@ -2,7 +2,9 @@ local Sprite = require('sprite')
 local Seal = {}
 
 function Seal:new(world, x, y)
+    print(world)
     local o = {}
+    
     setmetatable(o, self)
     self.__index = self
 
@@ -25,15 +27,20 @@ end
 
 function Seal:update(delta)
     self.body:setLinearVelocity(-250, 0)
-    if self.body:getX() <= 0 then
-        width, _ = love.graphics.getDimensions()
-        self.body:setX(width)
+    if self.body:getX() <= -100 then
+        if self.on_edge then self:on_edge(self) end
     end
 end
 
 function Seal:draw()
     self.sprite:draw(self.body:getX(), self.body:getY())
     love.graphics.circle('line', self.body:getX(), self.body:getY(), self.shape:getRadius())
+end
+
+--- Set a callback to the on_edge function
+-- called when this object reaches the left edge of the screen
+function Seal:set_callback(on_edge)
+    self.on_edge = on_edge
 end
 
 

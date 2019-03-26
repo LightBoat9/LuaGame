@@ -1,9 +1,7 @@
 --- A penguin KBody that can move up and down also
 --- Stops at the bottom of the screen
 --- If above a defined sea level it will be forced back down
-
 local Sprite = require('sprite')
-
 local Penguin = {}
 
 function Penguin:new(world, x, y)
@@ -51,27 +49,13 @@ function Penguin:update(delta)
     local width, height = love.graphics.getDimensions()
     self.body:setY(math.min(math.max(self.body:getY(), 0), height - 50))
 
-    
-    -- Rotate based on the velocity
-    if self.velocity > self.max_velocity * self.rotate_limit then
-        self.sprite:set_rotation(0.5)
-    elseif self.velocity < -self.max_velocity * self.rotate_limit then
-        self.sprite:set_rotation(-0.5)
-    else
-        self.sprite:set_rotation(0)
-    end
-    --]]
+    -- Rotate sprite based on velocity
+    self.sprite:set_rotation(self.velocity / self.max_velocity)
 end
 
 function Penguin:draw()
     Penguin.sprite:draw(self.body:getX(), self.body:getY())
     love.graphics.circle('line', self.body:getX(), self.body:getY(), self.shape:getRadius())
-end
-
---- Overwites parent set_position so that the position of the child sprite
---- is the same as this node
-function Penguin:set_position(x, y)
-    self.sprite:set_position(x, y)
 end
 
 return Penguin

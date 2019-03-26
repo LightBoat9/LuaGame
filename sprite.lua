@@ -1,9 +1,8 @@
 local Sprite = {}
-
 Sprite.centered = false
 
 function Sprite:new()
-    o = {}
+    local o = {}
     setmetatable(o, self)
     self.__index = self
     
