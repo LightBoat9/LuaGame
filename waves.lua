@@ -1,7 +1,10 @@
 --- Module for spawning of waves of seals, fish, and glaciers
 local Seal = require('seal')
 local Fish = require('fish')
+local Glacier = require('glacier')
 local Waves = {}
+
+-- Total "wave" area is 400
 
 function Waves:new(world)
     o = {}
@@ -12,6 +15,15 @@ function Waves:new(world)
     o.next_spawn = 2
 
     return o
+end
+
+function Waves:spawn_glacier(x, y, remove_callback)
+    local glacier = Glacier:new(self.world)
+    glacier.body:setX(x)
+    glacier.body:setY(y)
+    glacier:set_callback(remove_object)
+    add_object(glacier)
+    return glacier
 end
 
 function Waves:spawn_seal(x, y, remove_callback)
@@ -37,11 +49,30 @@ end
 
 --- Add the entities to the table
 function Waves:spawn(objects, remove_callback)
-    local width, _ = love.graphics.getDimensions()
+    local width, height = love.graphics.getDimensions()
+    r = math.random(0, 4)
     
-    local seal1 = self:spawn_seal(width, 150 + 96/2, remove_callback)
-    local fish = self:spawn_fish(width, seal1.body:getY() + 96, remove_callback)
-    local seal2 = self:spawn_seal(width, fish.body:getY() + 96, remove_callback)
+    -- Hard code for now maybe change idk
+    if r == 0 then
+        local seal1 = self:spawn_seal(width, 150 + 96 / 2, remove_callback)
+        local fish = self:spawn_fish(width, seal1.body:getY() + 104, remove_callback)
+        local seal2 = self:spawn_seal(width, fish.body:getY() + 104, remove_callback)
+    elseif r == 1 then
+        local seal1 = self:spawn_seal(width, height - 50 - 96 / 2, remove_callback)
+        local fish = self:spawn_fish(width, seal1.body:getY() - 104, remove_callback)
+        local seal2 = self:spawn_seal(width, fish.body:getY() - 104, remove_callback)
+    elseif r == 2 then
+        local glacier = self:spawn_glacier(width, 150 - 40 + 96 / 2, remove_callback)
+        local fish = self:spawn_fish(width, glacier.body:getY() + 104, remove_callback)
+        local seal = self:spawn_seal(width, fish.body:getY() + 104, remove_callback)
+    elseif r == 3 then
+        local fish = self:spawn_fish(width, 150 / 2, remove_callback)
+        local glacier = self:spawn_glacier(width, 150 - 40 + 96 / 2, remove_callback)
+        local seal = self:spawn_seal(width, height - 50 - 96 / 2, remove_callback)
+    elseif r == 4 then
+        local fish = self:spawn_fish(width, height - 50 - 96 / 2, remove_callback)
+        local seal = self:spawn_seal(width, fish.body:getY() - 96, remove_callback)
+    end
 end
 
 function Waves:update(delta)

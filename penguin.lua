@@ -9,7 +9,7 @@ function Penguin:new(world, x, y)
     setmetatable(o, self)
     self.__index = self
     
-    o.shape = love.physics.newCircleShape(20)
+    o.shape = love.physics.newCircleShape(15)
     o.body = love.physics.newBody(world, x, y, 'dynamic')
     o.fixture = love.physics.newFixture(o.body, o.shape)
     o.fixture:setUserData(o)

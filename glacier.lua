@@ -1,21 +1,23 @@
 local Sprite = require('sprite')
-local Seal = {}
+local Glacier = {}
 
-function Seal:new(world, x, y)
+function Glacier:new(world, x, y)
     local o = {}
     
     setmetatable(o, self)
     self.__index = self
 
     o.sprite = Sprite:new()
-    o.sprite:set_image('seal.png')
+    o.sprite:set_image('glacier.png')
     o.sprite:set_centered(true)
 
+    local width, height = o.sprite:get_size()
+
     o.body = love.physics.newBody(world, x, y, 'dynamic')
-    o.shape = love.physics.newCircleShape(48)
+    o.shape = love.physics.newPolygonShape(width / 2, 0, 0, 40, width, 40, width / 2, height)
     o.fixture = love.physics.newFixture(o.body, o.shape)
     o.fixture:setUserData(o)
-    o.name = 'seal'
+    o.name = 'glacier'
     o.fixture:setSensor(true)
 
     -- Exists on category 2 and does not collide with category 3
@@ -24,23 +26,35 @@ function Seal:new(world, x, y)
     return o
 end
 
-function Seal:update(delta)
+function Glacier:update(delta)
     self.body:setLinearVelocity(-250, 0)
     if self.body:getX() <= -100 then
         if self.on_edge then self:on_edge(self) end
     end
 end
 
-function Seal:draw()
+function Glacier:draw()
     self.sprite:draw(self.body:getX(), self.body:getY())
-    love.graphics.circle('line', self.body:getX(), self.body:getY(), self.shape:getRadius())
+    local width, height = self.sprite:get_size()
+
+    local points = { self.shape:getPoints() }
+    for key, value in ipairs(points) do
+        if key % 2 == 0 then
+            points[key] = self.body:getY() + points[key] - height / 2 
+        else
+            points[key] = self.body:getX() + points[key] - width / 2
+        end
+    end
+
+    --print(self.body:getX(), self.body:getY())
+    love.graphics.polygon('line', points)
 end
 
 --- Set a callback to the on_edge function
 -- called when this object reaches the left edge of the screen
-function Seal:set_callback(on_edge)
+function Glacier:set_callback(on_edge)
     self.on_edge = on_edge
 end
 
 
-return Seal
+return Glacier

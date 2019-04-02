@@ -54,7 +54,7 @@ function beginContact(fixture1, fixture2)
     fixtures = { [fixture1:getUserData().name]=fixture1:getUserData(), [fixture2:getUserData().name]=fixture2:getUserData() }
     
     if fixtures.penguin then
-        if fixtures.seal then    
+        if fixtures.seal or fixtures.glacier then    
             print('Penguin Hurt')
         elseif fixtures.fish then
             remove_object(fixtures.fish)
