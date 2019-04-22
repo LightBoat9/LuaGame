@@ -33,7 +33,7 @@ end
 
 function Seal:draw()
     self.sprite:draw(self.body:getX(), self.body:getY())
-    love.graphics.circle('line', self.body:getX(), self.body:getY(), self.shape:getRadius())
+    --love.graphics.circle('line', self.body:getX(), self.body:getY(), self.shape:getRadius())
 end
 
 --- Set a callback to the on_edge function

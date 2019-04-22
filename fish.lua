@@ -17,6 +17,12 @@ function Fish:new(world, x, y)
     o.name = 'fish'
     o.fixture:setSensor(true)
 
+    local width, height = love.graphics.getDimensions()
+
+    Fish.seagull = Sprite:new()
+    Fish.seagull:set_image('seagull.png')
+    Fish.seagull:set_centered(true)
+
     -- Exists on category 2 and does not collide with category 3
     o.fixture:setCategory(2)
     o.fixture:setMask(3)
@@ -33,7 +39,10 @@ end
 
 function Fish:draw()
     self.sprite:draw(self.body:getX(), self.body:getY())
-    love.graphics.circle('line', self.body:getX(), self.body:getY(), self.shape:getRadius())
+    if self.body:getY() < 100 then
+        self.seagull:draw(self.body:getX(), self.body:getY() - 32)
+    end
+    --love.graphics.circle('line', self.body:getX(), self.body:getY(), self.shape:getRadius())
 end
 
 --- Set a callback to the on_edge function

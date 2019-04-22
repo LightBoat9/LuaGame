@@ -55,7 +55,7 @@ end
 
 function Penguin:draw()
     Penguin.sprite:draw(self.body:getX(), self.body:getY())
-    love.graphics.circle('line', self.body:getX(), self.body:getY(), self.shape:getRadius())
+    --love.graphics.circle('line', self.body:getX(), self.body:getY(), self.shape:getRadius())
 end
 
 return Penguin

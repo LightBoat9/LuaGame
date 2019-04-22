@@ -14,7 +14,7 @@ function Glacier:new(world, x, y)
     local width, height = o.sprite:get_size()
 
     o.body = love.physics.newBody(world, x, y, 'dynamic')
-    o.shape = love.physics.newPolygonShape(width / 2, 0, 0, 40, width, 40, width / 2, height)
+    o.shape = love.physics.newCircleShape(32)
     o.fixture = love.physics.newFixture(o.body, o.shape)
     o.fixture:setUserData(o)
     o.name = 'glacier'
@@ -37,17 +37,7 @@ function Glacier:draw()
     self.sprite:draw(self.body:getX(), self.body:getY())
     local width, height = self.sprite:get_size()
 
-    local points = { self.shape:getPoints() }
-    for key, value in ipairs(points) do
-        if key % 2 == 0 then
-            points[key] = self.body:getY() + points[key] - height / 2 
-        else
-            points[key] = self.body:getX() + points[key] - width / 2
-        end
-    end
-
-    --print(self.body:getX(), self.body:getY())
-    love.graphics.polygon('line', points)
+    --love.graphics.circle('line', self.body:getX(), self.body:getY(), self.shape:getRadius())
 end
 
 --- Set a callback to the on_edge function
